@@ -2,8 +2,8 @@ name: Build Godot Android Plugin
 description: Build Godot Android Plugin (standard or mono).
 inputs:
   release_version:
-    description: The Release Version of Build (standard/mono/both).
-    default: "both"
+    description: The Release Version of Build (standard/mono).
+    default: "standard"
 
 runs:
   steps:
