@@ -6,7 +6,9 @@ inputs:
     default: "standard"
 
 runs:
+  using: "composite"
   steps:
     - name: Hello World
+      shell: bash
       run: |
         echo Hello godot-android-action
