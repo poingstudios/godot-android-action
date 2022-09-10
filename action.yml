@@ -23,7 +23,10 @@ inputs:
   gdap_file_path:
     description: The path of `.gdap` file.
     required: true
-
+outputs:
+  artifact_name:
+    description: "Artifact name of .zip exported"
+    value: ${{ steps.artifact_name_generator.outputs.artifact_name }}
 runs:
   using: "composite"
   steps:
@@ -34,12 +37,14 @@ runs:
         if [ ${#CURRENT_GODOT_VERSION} -eq 1 ]; then CURRENT_GODOT_VERSION="${CURRENT_GODOT_VERSION}.0"; fi
         echo "CURRENT_GODOT_VERSION=${CURRENT_GODOT_VERSION}" >> $GITHUB_ENV
     
-    - name: Create Output file name variable
+    - id: artifact_name_generator
+      name: Create Output file name variable
       shell: bash
       run: |
         OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
-    
+        echo "::set-output name=artifact_name::$(echo ${OUTPUT_FILENAME})"
+
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
       run: | 
@@ -50,7 +55,7 @@ runs:
         FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}"
         
         if [ ${{ inputs.build_version}} != stable ]; then
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${{ inputs.build_version}}
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${{ inputs.build_version}}
         fi
         
         if [ ${{ inputs.release_version }} = mono ]; then 
