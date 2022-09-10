@@ -1,10 +1,9 @@
 name: Build Godot Android Plugin
 description: Build Godot Android Plugin (standard or mono).
 inputs:
-  upload_artifact:
-    description: 'True to Upload Artifact'
-    default: true
-    type: boolean 
+  upload_artifact_retention_days:
+    description: Retention Days to keep the Artifact
+    default: 90
   release_version:
     description: The Release Version of Build (standard/mono).
     default: "standard"
@@ -55,9 +54,9 @@ runs:
       run: |
         mv admob/AdMob.gdap admob/build/outputs/aar/
         zip -j android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip admob/build/outputs/aar/*
-    if: ${{ inputs.upload_artifact }}
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
         path: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        retention-days: ${{ inputs.upload_artifact_retention_days }}
