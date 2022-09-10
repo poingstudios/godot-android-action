@@ -43,7 +43,7 @@ runs:
       run: |
         OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
-        echo "::set-output name=artifact_name::$(echo ${OUTPUT_FILENAME}.zip)"
+        echo "::set-output name=artifact_name::$(echo ${OUTPUT_FILENAME})"
 
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
