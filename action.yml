@@ -31,7 +31,7 @@ runs:
     - name: Create Output file name variable
       shell: bash
       run: |
-        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
     
     - name: Download and prepare the Stable Godot .AAR LIB
@@ -60,15 +60,14 @@ runs:
       run: | 
         ${{ inputs.gradlew_build_path }}gradlew build
     
-    - name: Compress the binaries
+    - name: Move `.gdap` file to `build/outputs/arr/` folder
       shell: bash
       run: |
         mv ${{ inputs.gdap_file_path }} ${{ inputs.project_path }}/build/outputs/aar/
-        zip -j ${{env.OUTPUT_FILENAME}} ${{ inputs.project_path }}/build/outputs/aar/*
     
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{env.OUTPUT_FILENAME}}
-        path: ${{env.OUTPUT_FILENAME}}
+        path: ${{ inputs.project_path }}/build/outputs/aar
         retention-days: ${{ inputs.upload_artifact_retention_days }}
