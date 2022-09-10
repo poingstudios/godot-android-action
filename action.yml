@@ -10,7 +10,7 @@ inputs:
   project_path:
     description: The path of project.
     required: true
-  gdap_path:
+  gdap_file_path:
     description: The path of `.gdap` file.
     required: true
 
@@ -59,7 +59,7 @@ runs:
     - name: Compress the binaries
       shell: bash
       run: |
-        mv ${{ inputs.gdap_path }} ${{ inputs.project_path }}/build/outputs/aar/
+        mv ${{ inputs.gdap_file_path }} ${{ inputs.project_path }}/build/outputs/aar/
         zip -j ${{env.OUTPUT_FILENAME}} ${{ inputs.project_path }}/build/outputs/aar/*
     
     - name: Upload artifact
