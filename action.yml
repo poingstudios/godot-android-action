@@ -28,7 +28,7 @@ runs:
     - name: Create Output file name variable
       shell: bash
       run: |
-        OUTPUT_FILENAME = ${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
 
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
