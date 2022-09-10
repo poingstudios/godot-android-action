@@ -7,14 +7,16 @@ inputs:
   release_version:
     description: The Release Version of Build (standard/mono).
     default: "standard"
+  project_path:
+    description: The path of project.
+    required: true
+  gdap_path:
+    description: The path of `.gdap` file.
+    required: true
 
 runs:
   using: "composite"
   steps:
-    - name: Hello World
-      shell: bash
-      run: |
-        echo Hello godot-android-action
 
     - name: Verify current inputs godot_version
       shell: bash
@@ -23,6 +25,11 @@ runs:
         if [ ${#CURRENT_GODOT_VERSION} -eq 1 ]; then CURRENT_GODOT_VERSION="${CURRENT_GODOT_VERSION}.0"; fi
         echo "CURRENT_GODOT_VERSION=${CURRENT_GODOT_VERSION}" >> $GITHUB_ENV
     
+    - name: Create Output file name variable
+      shell: bash
+      run: |
+        OUTPUT_FILENAME = ${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
       run: | 
@@ -52,11 +59,12 @@ runs:
     - name: Compress the binaries
       shell: bash
       run: |
-        mv admob/AdMob.gdap admob/build/outputs/aar/
-        zip -j ${{ github.event.repository.name }}android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip admob/build/outputs/aar/*
+        mv ${{ inputs.gdap_path }} ${{ inputs.project_path }}/build/outputs/aar/
+        zip -j ${{env.OUTPUT_FILENAME}} ${{ inputs.project_path }}/build/outputs/aar/*
+    
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ github.event.repository.name }}android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
-        path: ${{ github.event.repository.name }}android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        name: ${{env.OUTPUT_FILENAME}}
+        path: ${{env.OUTPUT_FILENAME}}
         retention-days: ${{ inputs.upload_artifact_retention_days }}
