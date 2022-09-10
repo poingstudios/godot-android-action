@@ -12,3 +12,40 @@ runs:
       shell: bash
       run: |
         echo Hello godot-android-action
+
+    - name: Verify current inputs godot_version
+      run: |
+        CURRENT_GODOT_VERSION=3.5
+        if [ ${#CURRENT_GODOT_VERSION} -eq 1 ]; then CURRENT_GODOT_VERSION="${CURRENT_GODOT_VERSION}.0"; fi
+        echo "CURRENT_GODOT_VERSION=${CURRENT_GODOT_VERSION}" >> $GITHUB_ENV
+    - name: Download and prepare the Stable Godot .AAR LIB
+      run: | 
+        cd godot-lib 
+        GODOT_AAR_LIB="godot-lib.aar"
+        if [ ${{ inputs.release_version }} = standard ]; then 
+          GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.stable.release.aar"
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}/${GODOT_AAR_FILENAME}"
+        elif [ ${{ inputs.release_version }} = mono ]; then 
+          GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.stable.mono.release.aar"
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}/mono/${GODOT_AAR_FILENAME}"
+        fi
+        #get file on Godot's server and rename
+        wget $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
+        mv $GODOT_AAR_FILENAME $GODOT_AAR_LIB
+    
+    - name: Grant execute permission for gradlew
+      run: |
+        chmod +x gradlew
+        
+    - name: Build with Gradle
+      run: | 
+        ./gradlew build
+    - name: Compress the binaries
+      run: |
+        mv admob/AdMob.gdap admob/build/outputs/aar/
+        zip -j android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip admob/build/outputs/aar/*
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        path: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
