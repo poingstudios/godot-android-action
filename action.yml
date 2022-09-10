@@ -32,7 +32,8 @@ runs:
       shell: bash
       run: |
         OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
-
+        echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
+    
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
       run: | 
@@ -63,11 +64,11 @@ runs:
       shell: bash
       run: |
         mv ${{ inputs.gdap_file_path }} ${{ inputs.project_path }}/build/outputs/aar/
-        zip -j $OUTPUT_FILENAME ${{ inputs.project_path }}/build/outputs/aar/*
+        zip -j ${{env.OUTPUT_FILENAME}} ${{ inputs.project_path }}/build/outputs/aar/*
     
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: $OUTPUT_FILENAME
-        path: $OUTPUT_FILENAME
+        name: ${{env.OUTPUT_FILENAME}}
+        path: ${{env.OUTPUT_FILENAME}}
         retention-days: ${{ inputs.upload_artifact_retention_days }}
