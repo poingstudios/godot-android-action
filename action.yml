@@ -37,7 +37,7 @@ runs:
     - name: Create Output file name variable
       shell: bash
       run: |
-        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}
+        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
     
     - name: Download and prepare the Stable Godot .AAR LIB
@@ -61,8 +61,6 @@ runs:
         GODOT_AAR_FILENAME+=".release.aar"
         FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${GODOT_AAR_FILENAME}
         
-        echo $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
-        #get file on Godot's server and rename
         wget $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
         mv $GODOT_AAR_FILENAME $GODOT_AAR_LIB
     
