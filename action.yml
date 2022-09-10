@@ -7,6 +7,9 @@ inputs:
   release_version:
     description: The Release Version of Build (standard/mono).
     default: "standard"
+  gradlew_build_path:
+    description: The path of `.gdap` file.
+    default: "./"
   project_path:
     description: The path of project.
     required: true
@@ -54,7 +57,7 @@ runs:
     - name: Build with Gradle
       shell: bash
       run: | 
-        ./gradlew build
+        ${{ inputs.gradlew_build_path }}gradlew build
     
     - name: Compress the binaries
       shell: bash
