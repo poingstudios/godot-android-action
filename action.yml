@@ -53,10 +53,10 @@ runs:
       shell: bash
       run: |
         mv admob/AdMob.gdap admob/build/outputs/aar/
-        zip -j android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip admob/build/outputs/aar/*
+        zip -j ${{ github.event.repository.name }}android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip admob/build/outputs/aar/*
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
-        path: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        name: ${{ github.event.repository.name }}android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
+        path: ${{ github.event.repository.name }}android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
         retention-days: ${{ inputs.upload_artifact_retention_days }}
