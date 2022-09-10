@@ -7,11 +7,17 @@ inputs:
   release_version:
     description: The Release Version of Build (standard/mono).
     default: "standard"
+  build_version:
+    description: The Build Version of Godot (stable/rc1/beta1) (`alpha` or pre-alpha` could not work).
+    default: "stable"
   gradlew_build_path:
     description: The path of `.gdap` file.
     default: "./"
   project_path:
     description: The path of project.
+    required: true
+  godot-lib_folder_path:
+    description: The path of godot-lib.
     required: true
   gdap_file_path:
     description: The path of `.gdap` file.
@@ -20,7 +26,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-
     - name: Verify current inputs godot_version
       shell: bash
       run: |
@@ -37,15 +42,24 @@ runs:
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
       run: | 
-        cd godot-lib 
+        cd ${{ inputs.godot-lib_folder_path }} 
         GODOT_AAR_LIB="godot-lib.aar"
-        if [ ${{ inputs.release_version }} = standard ]; then 
-          GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.stable.release.aar"
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}/${GODOT_AAR_FILENAME}"
-        elif [ ${{ inputs.release_version }} = mono ]; then 
-          GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.stable.mono.release.aar"
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}/mono/${GODOT_AAR_FILENAME}"
+        
+        GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.${{ inputs.build_version}}"
+        FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}/"
+        
+        if [ ${{ inputs.build_version}} != stable ]; then
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${{ inputs.build_version}}/
         fi
+        
+        if [ ${{ inputs.release_version }} = mono ]; then 
+          GODOT_AAR_FILENAME+=".mono."
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+="/mono/"
+        fi
+        
+        GODOT_AAR_FILENAME+="release.aar"
+        FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${GODOT_AAR_FILENAME}"
+        
         #get file on Godot's server and rename
         wget $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
         mv $GODOT_AAR_FILENAME $GODOT_AAR_LIB
@@ -53,7 +67,7 @@ runs:
     - name: Grant execute permission for gradlew
       shell: bash
       run: |
-        chmod +x gradlew
+        chmod +x ${{ inputs.gradlew_build_path }}gradlew
         
     - name: Build with Gradle
       shell: bash
