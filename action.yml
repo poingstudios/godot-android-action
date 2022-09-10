@@ -54,12 +54,13 @@ runs:
         
         if [ ${{ inputs.release_version }} = mono ]; then 
           GODOT_AAR_FILENAME+=".mono."
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+="/mono/"
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+="mono/"
         fi
         
         GODOT_AAR_FILENAME+="release.aar"
         FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${GODOT_AAR_FILENAME}"
         
+        echo $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
         #get file on Godot's server and rename
         wget $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
         mv $GODOT_AAR_FILENAME $GODOT_AAR_LIB
