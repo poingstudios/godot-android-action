@@ -53,7 +53,6 @@ runs:
         zip -j android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip admob/build/outputs/aar/*
 
     - name: Upload artifact
-      shell: bash
       uses: actions/upload-artifact@v2
       with:
         name: android-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}.zip
