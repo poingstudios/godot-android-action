@@ -60,11 +60,11 @@ runs:
       shell: bash
       run: |
         mv ${{ inputs.gdap_file_path }} ${{ inputs.project_path }}/build/outputs/aar/
-        zip -j ${{env.OUTPUT_FILENAME}} ${{ inputs.project_path }}/build/outputs/aar/*
+        zip -j $OUTPUT_FILENAME ${{ inputs.project_path }}/build/outputs/aar/*
     
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{env.OUTPUT_FILENAME}}
-        path: ${{env.OUTPUT_FILENAME}}
+        name: $OUTPUT_FILENAME
+        path: $OUTPUT_FILENAME
         retention-days: ${{ inputs.upload_artifact_retention_days }}
