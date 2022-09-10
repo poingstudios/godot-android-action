@@ -68,7 +68,7 @@ runs:
     - name: Grant execute permission for gradlew
       shell: bash
       run: |
-        chmod +x ${{ inputs.gradlew_build_path }}gradlew
+        chmod +x gradlew
         
     - name: Build with Gradle
       shell: bash
