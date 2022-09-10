@@ -58,7 +58,7 @@ runs:
         fi
         
         GODOT_AAR_FILENAME+="release.aar"
-        FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${GODOT_AAR_FILENAME}"
+        FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${GODOT_AAR_FILENAME}
         
         echo $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
         #get file on Godot's server and rename
