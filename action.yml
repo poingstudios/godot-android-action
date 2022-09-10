@@ -46,19 +46,19 @@ runs:
         GODOT_AAR_LIB="godot-lib.aar"
         
         GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.${{ inputs.build_version}}"
-        FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}/"
+        FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}"
         
         if [ ${{ inputs.build_version}} != stable ]; then
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${{ inputs.build_version}}/
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${{ inputs.build_version}}
         fi
         
         if [ ${{ inputs.release_version }} = mono ]; then 
-          GODOT_AAR_FILENAME+=".mono."
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+="mono/"
+          GODOT_AAR_FILENAME+=".mono"
+          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+="/mono"
         fi
         
-        GODOT_AAR_FILENAME+="release.aar"
-        FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=${GODOT_AAR_FILENAME}
+        GODOT_AAR_FILENAME+=".release.aar"
+        FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${GODOT_AAR_FILENAME}
         
         echo $FULL_PATHNAME_DOWNLOAD_GODOT_AAR
         #get file on Godot's server and rename
