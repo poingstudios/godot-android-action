@@ -41,7 +41,7 @@ runs:
       name: Create Output file name variable
       shell: bash
       run: |
-        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}.zip
+        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
         echo "::set-output name=artifact_name::$(echo ${OUTPUT_FILENAME})"
 
