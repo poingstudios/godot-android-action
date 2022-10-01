@@ -4,6 +4,9 @@ inputs:
   upload_artifact_retention_days:
     description: Retention Days to keep the Artifact
     default: 90
+  godot_version:
+    description: The version of Godot to be builded (3.5, 3.5.1)
+    required: true
   release_version:
     description: The Release Version of Build (standard/mono).
     default: "standard"
@@ -33,7 +36,7 @@ runs:
     - name: Verify current inputs godot_version
       shell: bash
       run: |
-        CURRENT_GODOT_VERSION=3.5
+        CURRENT_GODOT_VERSION=${{ inputs.godot_version }}
         if [ ${#CURRENT_GODOT_VERSION} -eq 1 ]; then CURRENT_GODOT_VERSION="${CURRENT_GODOT_VERSION}.0"; fi
         echo "CURRENT_GODOT_VERSION=${CURRENT_GODOT_VERSION}" >> $GITHUB_ENV
     
