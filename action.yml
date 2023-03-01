@@ -7,9 +7,6 @@ inputs:
   godot_version:
     description: The version of Godot to be builded (3.5, 3.5.1)
     required: true
-  release_version:
-    description: The Release Version of Build (standard/mono).
-    default: "standard"
   build_version:
     description: The Build Version of Godot (stable/rc1/beta1) (`alpha` or pre-alpha` could not work).
     default: "stable"
@@ -44,7 +41,7 @@ runs:
       name: Create Output file name variable
       shell: bash
       run: |
-        OUTPUT_FILENAME=${{ github.event.repository.name }}-${{ inputs.release_version }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
+        OUTPUT_FILENAME=${{ github.event.repository.name }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
         echo "::set-output name=artifact_name::$(echo ${OUTPUT_FILENAME})"
 
@@ -60,12 +57,7 @@ runs:
         if [ ${{ inputs.build_version}} != stable ]; then
           FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${{ inputs.build_version}}
         fi
-        
-        if [ ${{ inputs.release_version }} = mono ]; then 
-          GODOT_AAR_FILENAME+=".mono"
-          FULL_PATHNAME_DOWNLOAD_GODOT_AAR+="/mono"
-        fi
-        
+                
         GODOT_AAR_FILENAME+=".template_release.aar"
         FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${GODOT_AAR_FILENAME}
         
