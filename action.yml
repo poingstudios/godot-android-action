@@ -58,7 +58,7 @@ runs:
           FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${{ inputs.build_version}}
         fi
         
-        if [[ "${{env.CURRENT_GODOT_VERSION}:0:1}" != "4" ]]; then
+        if [ "${{env.CURRENT_GODOT_VERSION}:0:1}" != "4" ]; then
           GODOT_AAR_FILENAME+=".release.aar"
         else
           GODOT_AAR_FILENAME+=".template_release.aar"
