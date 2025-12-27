@@ -52,8 +52,8 @@ runs:
         GODOT_AAR_LIB="godot-lib.aar"
         
         GODOT_AAR_FILENAME="godot-lib.${{env.CURRENT_GODOT_VERSION}}.${{ inputs.build_version}}"
-        FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://downloads.tuxfamily.org/godotengine/${{env.CURRENT_GODOT_VERSION}}"
-        
+        FULL_PATHNAME_DOWNLOAD_GODOT_AAR="https://github.com/godotengine/godot/releases/download/${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}"
+
         if [ ${{ inputs.build_version}} != stable ]; then
           FULL_PATHNAME_DOWNLOAD_GODOT_AAR+=/${{ inputs.build_version}}
         fi
