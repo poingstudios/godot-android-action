@@ -5,13 +5,13 @@ inputs:
     description: Retention Days to keep the Artifact
     default: 90
   godot_version:
-    description: The version of Godot to be builded (3.5, 3.5.1)
+    description: The version of Godot to be built (3.5, 3.5.1)
     required: true
   build_version:
-    description: The Build Version of Godot (stable/rc1/beta1) (`alpha` or pre-alpha` could not work).
+    description: The Build Version of Godot (stable/rc1/beta1) (`alpha` or `pre-alpha` could not work).
     default: "stable"
   gradlew_build_path:
-    description: The path of `.gdap` file.
+    description: The path of the `gradlew` build script.
     default: "./"
   project_path:
     description: The path of project.
@@ -43,7 +43,7 @@ runs:
       run: |
         OUTPUT_FILENAME=${{ github.event.repository.name }}-template-v${{env.CURRENT_GODOT_VERSION}}-${{ inputs.build_version}}
         echo "OUTPUT_FILENAME=${OUTPUT_FILENAME}" >> $GITHUB_ENV
-        echo "::set-output name=artifact_name::$(echo ${OUTPUT_FILENAME})"
+        echo "artifact_name=${OUTPUT_FILENAME}" >> "$GITHUB_OUTPUT"
 
     - name: Download and prepare the Stable Godot .AAR LIB
       shell: bash
@@ -87,7 +87,7 @@ runs:
         mv ${{ inputs.gdap_file_path }} ${{ inputs.project_path }}/build/outputs/aar/
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.OUTPUT_FILENAME}}
         path: ${{ inputs.project_path }}/build/outputs/aar
